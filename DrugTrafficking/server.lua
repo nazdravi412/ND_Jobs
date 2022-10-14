@@ -68,7 +68,7 @@ AddEventHandler('DrugTrafficking:RemoveItems', function(inv, item, count)
 end)
 
 RegisterServerEvent('DrugTrafficking:additem')
-AddEventHandler('DrugTrafficking:additem', function(ped, weapon, amount)
+AddEventHandler('DrugTrafficking:additem', function(inv, item, count)
 	local source = source
 	local inv = inv
 	local item = item
