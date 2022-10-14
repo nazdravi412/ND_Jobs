@@ -23,7 +23,7 @@ Config.Positions = {
     {x = 20.73, y = 3715.05, z = 37.51}, -- Stab City (3034)
     {x = 1643.74, y = 4836.80, z = 39.84}, -- Grapespeed Paint Shop (2009)
     {x = 1905.70, y = 4924.23, z = 46.69}, -- Grapespeed Farm (2023)
-    {x = 2456.38, y = 4953.71, z = 42.94 } -- O'Neil Brothers 2027
+    {x = 2456.38, y = 4953.71, z = 42.94 }, -- O'Neil Brothers 2027
 }
 
 -- These need to be the spawn codes in ox_inventory/data/items.lua...not the label names.
