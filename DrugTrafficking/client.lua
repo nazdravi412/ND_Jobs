@@ -11,7 +11,7 @@ if(on_duty) then
 end
 
 --Known issue: If switching between LEO and Civ, this does not toggle the blip on the map.
-if PlayerJob == Config.civJob then
+--if PlayerJob == "SACO" then
 	SetBlipSprite(blip, 457)
 	SetBlipDisplay(blip, 4)
 	SetBlipColour(blip, 21)
@@ -19,7 +19,7 @@ if PlayerJob == Config.civJob then
 	BeginTextCommandSetBlipName("STRING")
 	AddTextComponentString("Drug Trafficking Job")
 	EndTextCommandSetBlipName(blip)
-end
+--end
 
 function NewBlip()
     local objective = math.randomchoice(Config.Positions)
@@ -118,7 +118,7 @@ function NewChoice()
             if distance <= 10 then
                 opti = 2
                 DisplayHelpTextThisFrame("press_collect_drugs")
-                if IsControlJustPressed(1, 38) then
+                if IsControlJustPressed(1, 38) and IsPedInAnyVehicle(ped, true) then
 					-- Stores drugs in trunk of vehicle.
 					local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
 					drugAmount = math.random(5, 15)
@@ -127,7 +127,12 @@ function NewChoice()
 					local plates = GetVehicleNumberPlateText(vehicle)
 					drugStash = "trunk"..plates
 					TriggerServerEvent("DrugTrafficking:additem", drugStash , cargo, drugAmount)
-					
+					-- exports['t-notify']:Custom({
+					-- style = 'message',
+					-- title = 'Drug Trafficking',
+					-- message = "Just received "..drugAmount.." of "..cargo.." for vehicle "..drugStash,
+					-- duration = 6000,
+					-- })
                     RemoveBlip(blip)
                     NewBlip()
                     break
