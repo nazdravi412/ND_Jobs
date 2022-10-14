@@ -5,7 +5,7 @@ Do not edit below if you don't know what you are doing
 ]] --
 
 -- ND_Framework exports (edit with your framework's)
-local NDCore = exports["ND_Core"]:GetCoreObject()
+NDCore = exports["ND_Core"]:GetCoreObject()
 
 -- variables, do not touch
 local deliveries = {}
@@ -56,4 +56,22 @@ RegisterNetEvent("DrugTrafficking:NeedsPayment", function()
         return
     end	
     print(string.format("^1Possible exploiter detected\nName: ^0%s\n^1Identifier: ^0%s\n^1Reason: ^0has somehow requested to be paid without being near the job ending location", GetPlayerName(source), GetPlayerIdentifier(source, 0)))
+end)
+
+RegisterServerEvent('DrugTrafficking:RemoveItems')
+AddEventHandler('DrugTrafficking:RemoveItems', function(inv, item, count)
+	local source = source
+	local inv = inv
+	local item = item
+	local count = tonumber(count)
+	exports.ox_inventory:RemoveItem(inv, item, count, nil, nil)
+end)
+
+RegisterServerEvent('DrugTrafficking:additem')
+AddEventHandler('DrugTrafficking:additem', function(ped, weapon, amount)
+	local source = source
+	local inv = inv
+	local item = item
+	local count = tonumber(count)
+	exports.ox_inventory:AddItem(inv, item, count, nil, nil, nil)
 end)
