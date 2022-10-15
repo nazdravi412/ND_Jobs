@@ -77,17 +77,11 @@ AddEventHandler('DrugTrafficking:additem', function(inv, item, count)
 	repeat
 		exports.ox_inventory:AddItem(inv, item, count)
 		Citizen.Wait(1000)
-		print("Before searching.")
 		invLevel = exports.ox_inventory:Search(inv, 'count', {'meth', 'cocaine', 'drug_blue', 'drug_red', 'drug_white'}, nil)
-		print(invLevel)
-		print("After searching.")
 		if invLevel ~= false then
-			print("invLevel was not false.")
 			for name, count in pairs(invLevel) do
 				if count > 0 then
 					invAdded = true
-					print("invAdded is now true.")
-					--TriggerClientEvent('t-notify:client:Custom', source, {style  =  'message', duration = 6000, title = 'DrugTrafficking2', message  =  'Drugs: '..inv.." "..item.." "..count, sound = false, custom = true})
 				end
 			end
 		end
