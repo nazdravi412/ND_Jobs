@@ -143,12 +143,6 @@ function NewChoice()
 					drugStash = "trunk"..plates -- Will delete and use pedID once we have NPCs and ddialog.
 					Citizen.Wait(100)
 					TriggerServerEvent("DrugTrafficking:additem", pedID , cargo, drugAmount)
-					-- exports['t-notify']:Custom({
-					-- style = 'message',
-					-- title = 'Drug Trafficking',
-					-- message = "Just received "..drugAmount.." of "..cargo.." for vehicle "..drugStash,
-					-- duration = 6000,
-					-- })
                     RemoveBlip(blip)
                     NewBlip()
                     break
@@ -188,23 +182,12 @@ function StopService()
                 if IsControlJustPressed(1, 38) then
 					TriggerServerEvent("DrugTrafficking:RemoveItems", pedID , cargo, drugAmount)
                     local playerPed = PlayerPedId()
-                    -- local vehicle = GetVehiclePedIsIn(playerPed, false)
-                    -- if GetEntityModel(vehicle) == GetHashKey("rumpo2") then
-                        -- DeleteEntity(vehicle)
                         TriggerServerEvent("DrugTrafficking:NeedsPayment", coordsEndService)
                         drawnotifcolor("You've received ~g~$" .. pay .. "~w~ for completing the job.", 140)
                         RemoveBlip(blip)
                         JobStarted = false
                         pay = 0
                         break
-                    -- else
-                        -- local vehicle = GetVehiclePedIsIn(playerPed, false)
-                        -- if GetEntityModel(vehicle) ~= GetHashKey("rumpo2") then
-                            -- drawnotifcolor("Bring back the van to get the money.", 140)
-                            -- JobStarted = true
-                            -- break
-                        -- end
-                    -- end
                 end
             end
         end
@@ -214,19 +197,6 @@ end
 
 function StartJob()
     local ped = PlayerPedId()
-    -- local vehicleName = 'rumpo2'
-
-    -- RequestModel(vehicleName)
-
-    -- while not HasModelLoaded(vehicleName) do
-        -- Wait(500)
-    -- end
-
-    -- local vehicle = CreateVehicle(vehicleName, 2201.32, 5616.51, 53.78, 325.27, true, false)
-    -- SetPedIntoVehicle(ped, vehicle, -1)
-    -- SetVehicleFixed(vehicle)
-    -- SetEntityAsMissionEntity(vehicle, true, true)
-    -- SetModelAsNoLongerNeeded(vehicleName)
     JobStarted = true
     TriggerServerEvent("DrugTrafficking:StartedCollecting")
     NewChoice()
@@ -234,7 +204,6 @@ end
 
 CreateThread(function()
     AddTextEntry("press_start_job", "Press ~INPUT_CONTEXT~ to start the job")
-	--createPed(GetHashKey("s_m_y_sheriff_01"),vector4(1843.42, 3690.05, 33.27, 225.00))
     while true do
         local opti = 5000
         local ped = PlayerPedId()
