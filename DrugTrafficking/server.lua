@@ -64,14 +64,33 @@ AddEventHandler('DrugTrafficking:RemoveItems', function(inv, item, count)
 	local inv = inv
 	local item = item
 	local count = tonumber(count)
-	exports.ox_inventory:RemoveItem(inv, item, count, nil, nil)
+	exports.ox_inventory:RemoveItem(inv, item, count)
 end)
 
 RegisterServerEvent('DrugTrafficking:additem')
 AddEventHandler('DrugTrafficking:additem', function(inv, item, count)
-	local source = source
-	local inv = inv
-	local item = item
-	local count = tonumber(count)
-	exports.ox_inventory:AddItem(inv, item, count, nil, nil, nil)
+	source = source
+	inv = inv
+	item = item
+	count = tonumber(count)
+	invAdded = false
+	repeat
+		exports.ox_inventory:AddItem(inv, item, count)
+		Citizen.Wait(1000)
+		print("Before searching.")
+		invLevel = exports.ox_inventory:Search(inv, 'count', {'meth', 'cocaine', 'drug_blue', 'drug_red', 'drug_white'}, nil)
+		print(invLevel)
+		print("After searching.")
+		if invLevel ~= false then
+			print("invLevel was not false.")
+			for name, count in pairs(invLevel) do
+				if count > 0 then
+					invAdded = true
+					print("invAdded is now true.")
+					--TriggerClientEvent('t-notify:client:Custom', source, {style  =  'message', duration = 6000, title = 'DrugTrafficking2', message  =  'Drugs: '..inv.." "..item.." "..count, sound = false, custom = true})
+				end
+			end
+		end
+
+	until (invAdded == true)
 end)

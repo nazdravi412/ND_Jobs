@@ -1,25 +1,41 @@
 local JobStarted = false
 local pay = 0
-local bliplocation = vector3(2196.65, 5609.89, 53.56)
-local blip = AddBlipForCoord(bliplocation.x, bliplocation.y, bliplocation.z)
+local blipStatus = false
+
 NDCore = exports["ND_Core"]:GetCoreObject()	
 
 -- Set blip only for civs. 
-local on_duty = NDCore.Functions.GetSelectedCharacter()	
-if(on_duty) then
-	PlayerJob = on_duty.job
-end
+Citizen.CreateThread(function()
+	while true do
+		local on_duty = NDCore.Functions.GetSelectedCharacter()	
+		if(on_duty) then
+			PlayerJob = on_duty.job
+		end
+		TriggerEvent("drugTrafficking:blipToggle")
+		Citizen.Wait(3000)
+	end
+end)
 
---Known issue: If switching between LEO and Civ, this does not toggle the blip on the map.
---if PlayerJob == "SACO" then
-	SetBlipSprite(blip, 457)
-	SetBlipDisplay(blip, 4)
-	SetBlipColour(blip, 21)
-	SetBlipAsShortRange(blip, true)
-	BeginTextCommandSetBlipName("STRING")
-	AddTextComponentString("Drug Trafficking Job")
-	EndTextCommandSetBlipName(blip)
---end
+RegisterNetEvent('drugTrafficking:blipToggle')
+AddEventHandler('drugTrafficking:blipToggle', function()
+	if PlayerJob == "SACO" and blipStatus == false then
+		local bliplocation = vector3(2196.65, 5609.89, 53.56)
+		blip = AddBlipForCoord(bliplocation.x, bliplocation.y, bliplocation.z)
+		print(blip)
+		SetBlipSprite(blip, 457)
+		SetBlipDisplay(blip, 4)
+		SetBlipColour(blip, 21)
+		SetBlipAsShortRange(blip, true)
+		BeginTextCommandSetBlipName("STRING")
+		AddTextComponentString("Drug Trafficking Job")
+		EndTextCommandSetBlipName(blip)
+		blipStatus = true
+	elseif PlayerJob ~= "SACO" then
+		print(blip)
+		RemoveBlip(blip)
+		blipStatus = false
+	end
+end)
 
 function NewBlip()
     local objective = math.randomchoice(Config.Positions)
@@ -48,7 +64,7 @@ function NewBlip()
                     TriggerServerEvent("DrugTrafficking:DrugsDelivered", objective)
                     pay = pay + Config.Pay
                     RemoveBlip(blip)
-					TriggerServerEvent("DrugTrafficking:RemoveItems", drugStash , cargo, drugAmount)
+					TriggerServerEvent("DrugTrafficking:RemoveItems", pedID , cargo, drugAmount)
                     ChoiceNotif()
                     break
                 end
@@ -106,8 +122,6 @@ function NewChoice()
     local coords = GetEntityCoords(ped)
     local distance = Vdist2(coords, route.x, route.y, route.z)
 
-	cargo = math.randomchoice(Config.Drugs)
-
     while true do
         local opti = 5000
         coords = GetEntityCoords(ped)
@@ -122,18 +136,19 @@ function NewChoice()
 					-- Stores drugs in trunk of vehicle.
 					local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
 					drugAmount = math.random(5, 15)
-					local pedID = GetPlayerId(ped)
+					pedID = GetPlayerId(ped)
 					local vehicle = GetVehiclePedIsIn(ped)
 					local plates = GetVehicleNumberPlateText(vehicle)
+					cargo = math.randomchoice(Config.Drugs)
 					drugStash = "trunk"..plates -- Will delete and use pedID once we have NPCs and ddialog.
-					Citizen.Wait(10)
-					TriggerServerEvent("DrugTrafficking:additem", drugStash , cargo, drugAmount)
-					exports['t-notify']:Custom({
-					style = 'message',
-					title = 'Drug Trafficking',
-					message = "Just received "..drugAmount.." of "..cargo.." for vehicle "..drugStash,
-					duration = 6000,
-					})
+					Citizen.Wait(100)
+					TriggerServerEvent("DrugTrafficking:additem", pedID , cargo, drugAmount)
+					-- exports['t-notify']:Custom({
+					-- style = 'message',
+					-- title = 'Drug Trafficking',
+					-- message = "Just received "..drugAmount.." of "..cargo.." for vehicle "..drugStash,
+					-- duration = 6000,
+					-- })
                     RemoveBlip(blip)
                     NewBlip()
                     break
@@ -171,7 +186,7 @@ function StopService()
                 opti = 2
                 DisplayHelpTextThisFrame("press_ranger_ha420")
                 if IsControlJustPressed(1, 38) then
-					TriggerServerEvent("DrugTrafficking:RemoveItems", drugStash , cargo, drugAmount)
+					TriggerServerEvent("DrugTrafficking:RemoveItems", pedID , cargo, drugAmount)
                     local playerPed = PlayerPedId()
                     -- local vehicle = GetVehiclePedIsIn(playerPed, false)
                     -- if GetEntityModel(vehicle) == GetHashKey("rumpo2") then
@@ -219,6 +234,7 @@ end
 
 CreateThread(function()
     AddTextEntry("press_start_job", "Press ~INPUT_CONTEXT~ to start the job")
+	--createPed(GetHashKey("s_m_y_sheriff_01"),vector4(1843.42, 3690.05, 33.27, 225.00))
     while true do
         local opti = 5000
         local ped = PlayerPedId()
@@ -276,6 +292,18 @@ function GetPlayerId(target_ped)
     return 0
 end
 
-function CreateNPCpeds()
-	-- Placeholder
+function CreateNPCstart(model, startCoords)
+    local hashFile = model
+    while not HasModelLoaded(hashFile) do
+        RequestModel(hashFile)
+        Citizen.Wait(10) 
+    end
+
+    npc = CreatePed(69, hashFile, startCoords, true, true) 
+    FreezeEntityPosition(npc, true)
+    SetEntityInvincible(npc, true) -- Will change to false when we integrate bodyguards to defend.
+    SetBlockingOfNonTemporaryEvents(npc, true)
+    SetModelAsNoLongerNeeded(hashFile)
+    TaskStartScenarioInPlace(npc, 'WORLD_HUMAN_GUARD_STAND', 0, true)
+
 end
