@@ -118,21 +118,22 @@ function NewChoice()
             if distance <= 10 then
                 opti = 2
                 DisplayHelpTextThisFrame("press_collect_drugs")
-                if IsControlJustPressed(1, 38) and IsPedInAnyVehicle(ped, true) then
+                if IsControlJustPressed(1, 38) and IsPedInAnyVehicle(ped, true) then -- Remove vehicle check when start using NPCs
 					-- Stores drugs in trunk of vehicle.
 					local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
 					drugAmount = math.random(5, 15)
 					local pedID = GetPlayerId(ped)
 					local vehicle = GetVehiclePedIsIn(ped)
 					local plates = GetVehicleNumberPlateText(vehicle)
-					drugStash = "trunk"..plates
+					drugStash = "trunk"..plates -- Will delete and use pedID once we have NPCs and ddialog.
+					Citizen.Wait(10)
 					TriggerServerEvent("DrugTrafficking:additem", drugStash , cargo, drugAmount)
-					-- exports['t-notify']:Custom({
-					-- style = 'message',
-					-- title = 'Drug Trafficking',
-					-- message = "Just received "..drugAmount.." of "..cargo.." for vehicle "..drugStash,
-					-- duration = 6000,
-					-- })
+					exports['t-notify']:Custom({
+					style = 'message',
+					title = 'Drug Trafficking',
+					message = "Just received "..drugAmount.." of "..cargo.." for vehicle "..drugStash,
+					duration = 6000,
+					})
                     RemoveBlip(blip)
                     NewBlip()
                     break
