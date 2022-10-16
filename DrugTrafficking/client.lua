@@ -21,7 +21,7 @@ AddEventHandler('drugTrafficking:blipToggle', function()
 	if PlayerJob == "SACO" and blipStatus == false then
 		local bliplocation = vector3(2196.65, 5609.89, 53.56)
 		blip = AddBlipForCoord(bliplocation.x, bliplocation.y, bliplocation.z)
-		print(blip)
+		--print(blip)
 		SetBlipSprite(blip, 457)
 		SetBlipDisplay(blip, 4)
 		SetBlipColour(blip, 21)
@@ -31,9 +31,10 @@ AddEventHandler('drugTrafficking:blipToggle', function()
 		EndTextCommandSetBlipName(blip)
 		blipStatus = true
 	elseif PlayerJob ~= "SACO" then
-		print(blip)
+		--print(blip)
 		RemoveBlip(blip)
 		blipStatus = false
+		Citizen.Wait(3000)
 	end
 end)
 
