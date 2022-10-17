@@ -69,7 +69,7 @@ end)
 
 RegisterServerEvent('DrugTrafficking:additem')
 AddEventHandler('DrugTrafficking:additem', function(inv, item, count)
-	print("item add start")
+	-- print("item add start")
 	source = source
 	local inv = inv
 	local item = item
