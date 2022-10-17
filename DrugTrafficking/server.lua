@@ -74,25 +74,28 @@ AddEventHandler('DrugTrafficking:additem', function(inv, item, count)
 	local inv = inv
 	local item = item
 	local count = count
-	invAdded = false
-	repeat
-		print("repeat started")
-		exports.ox_inventory:AddItem(inv, item, count)
-		print("export ran")
-		Citizen.Wait(1000)
-		print("Items are: "..count.." of "..item.." for "..inv)
-		local invLevel = exports.ox_inventory:Search(inv, 'count', {'meth', 'cocaine', 'drug_blue', 'drug_red', 'drug_white', 'joint'}, nil)
-		print("search completed"..dump(invLevel))
-		if invLevel ~= false then
-			for name, count in pairs(invLevel) do
-				if count > 0 then
-					print("confirmed added to inventory")
-					invAdded = true
-				end
-			end
-		end
+	
+	exports.ox_inventory:AddItem(inv, item, count)
+	
+	-- invAdded = false
+	-- repeat
+		-- print("repeat started")
+		-- exports.ox_inventory:AddItem(inv, item, count)
+		-- print("export ran")
+		-- Citizen.Wait(1000)
+		-- print("Items are: "..count.." of "..item.." for "..inv)
+		-- local invLevel = exports.ox_inventory:Search(inv, 'count', {'meth', 'cocaine', 'drug_blue', 'drug_red', 'drug_white', 'joint'}, nil)
+		-- print("search completed"..dump(invLevel))
+		-- if invLevel ~= false then
+			-- for name, count in pairs(invLevel) do
+				-- if count > 0 then
+					-- print("confirmed added to inventory")
+					-- invAdded = true
+				-- end
+			-- end
+		-- end
 
-	until (invAdded == true)
+	-- until (invAdded == true)
 end)
 
 function dump(o)
