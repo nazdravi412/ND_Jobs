@@ -30,8 +30,6 @@ Config.Positions = {
 Config.Drugs = {
 	'cocaine',
 	'drug_blue',
-	'drug_red',
-	'drug_white',
 	'joint',
 	'meth',
 }

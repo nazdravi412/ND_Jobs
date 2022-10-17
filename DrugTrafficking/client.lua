@@ -204,22 +204,22 @@ function StartJob()
 end
 
 CreateThread(function()
-    AddTextEntry("press_start_job", "Press ~INPUT_CONTEXT~ to start the job")
+    --AddTextEntry("press_start_job", "Press ~INPUT_CONTEXT~ to start the job")
+	CreateNPCstart(GetHashKey("ig_davenorton"),vector4(2194.06, 5597.26, 52.77, 334.34))
     while true do
         local opti = 5000
         local ped = PlayerPedId()
         local coords = GetEntityCoords(ped)
-        local distance = Vdist2(vector3(2196.65, 5609.89, 52.4), coords)
+        local distance = Vdist2(vector3(2194.06, 5597.26, 53.77), coords)
         if distance <= 50 and not JobStarted then
             opti = 1000
             if distance <= 10 then
                 opti = 2
-                DrawMarker(1, 2196.65, 5609.89, 52.4, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 1.5001, 255, 255, 255, 200, 0, 0, 0, 0)
+                --DrawMarker(1, 2194.06, 5597.26, 53.77, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 1.5001, 255, 255, 255, 200, 0, 0, 0, 0)
                 if distance <= 2 then
-                    DisplayHelpTextThisFrame("press_start_job")
-                    if IsControlJustPressed(1, 38) then
-                        StartJob()
-                    end
+                    -- Create dialog for NPC to give instructions via messages like used in the vehicle boost script.
+					-- Only way to start job is now via ox_target.
+					-- Create option to start via Drawtext and proximity??
                 end
             end
         end
@@ -277,3 +277,27 @@ function CreateNPCstart(model, startCoords)
     TaskStartScenarioInPlace(npc, 'WORLD_HUMAN_GUARD_STAND', 0, true)
 
 end
+
+-- Ox_Target integration
+
+exports.ox_target:addBoxZone({
+    coords = vec3(2194.05, 5597.25, 53.75),
+    size = vec3(1, 0.75, 2.0),
+    rotation = 0.0,
+    options = {
+        {
+            name = 'drug_trafficker',
+            event = 'drugTrafficking:startJob',
+            icon = 'fa-solid fa-cube',
+            label = 'Start Job',
+            -- canInteract = function(entity, distance, coords, name)
+               -- ExecuteCommand("e dance")
+            -- end
+        }
+    }
+})
+
+RegisterNetEvent('drugTrafficking:startJob')
+AddEventHandler('drugTrafficking:startJob', function()
+	StartJob()
+end)
