@@ -6,6 +6,19 @@ itemsConfirmed = false
 
 NDCore = exports["ND_Core"]:GetCoreObject()	
 
+RegisterCommand("prog", function()
+local testPed = cache.ped
+print(testPed)
+exports["ModernHUD"]:AndyyyNotify({
+title = "Ox_Lib Test",
+message = "Current ped is "..testPed,
+icon = "fas fa-money-check",
+colorHex = "#34eb52",
+timeout = 5000
+})
+print("PlayerPedId is "..cache.ped)							
+end, false)
+
 -- Set blip only for civs. 
 Citizen.CreateThread(function()
 	while true do
@@ -58,7 +71,7 @@ end)
 function NewBlip()
 	timerCompleted = false
     local objective = math.randomchoice(Config.Positions)
-    local ped = PlayerPedId()
+    local ped = cache.ped
 	local narco = math.randomchoice(Config.Narcos)
 	CreateNPCdropOff(GetHashKey(narco), objective)
     blip = AddBlipForCoord(objective.x, objective.y, objective.z)
@@ -159,7 +172,7 @@ end
 
 function NewChoice()
     route = math.randomchoice(Config.Positions)
-    ped = PlayerPedId()
+    ped = cache.ped
 	local narco = math.randomchoice(Config.Narcos)
 	CreateNPCdropOff(GetHashKey(narco), route)
     blip = AddBlipForCoord(route.x, route.y, route.z)
@@ -228,7 +241,7 @@ Citizen.CreateThread(function()
 	end
 	
 	while true do
-			local deadPlayer = IsPedDeadOrDying(PlayerPedId(), true)
+			local deadPlayer = IsPedDeadOrDying(cache.ped, true)
 			if deadPlayer and JobStarted then
 
 				print("Player is dead!")
@@ -243,7 +256,7 @@ end)
 
 function StopService()
     local coordsEndService = Config.StartingPosition
-    local ped = PlayerPedId()
+    local ped = cache.ped
     AddTextEntry("press_ranger_ha420", 'Press ~INPUT_CONTEXT~ to return to the house and get the money.')
 
     blip = AddBlipForCoord(coordsEndService)
@@ -263,7 +276,7 @@ function StopService()
                 DisplayHelpTextThisFrame("press_ranger_ha420")
                 if IsControlJustPressed(1, 38) then
 					TriggerServerEvent("DrugTrafficking:RemoveItems", pedID , cargo, drugAmount)
-                    local playerPed = PlayerPedId()
+                    local playerPed = cache.ped
                         TriggerServerEvent("DrugTrafficking:NeedsPayment", coordsEndService)
                         drawnotifcolor("You've received ~g~$" .. pay .. "~w~ for completing the job.", 140)
                         RemoveBlip(blip)
@@ -279,9 +292,9 @@ function StopService()
 end
 
 function StartJob()
-    local ped = PlayerPedId()
+    local ped = cache.ped
     JobStarted = true
-	showSubtitle("I need you make some drops for me today.", 5000)
+	showSubtitle("I need you to make some drops for me today.", 5000)
 	Citizen.Wait(4000)
 	showSubtitle("I'll give you $1250 for each one.", 5000)
 	Citizen.Wait(4000)
@@ -301,7 +314,7 @@ CreateThread(function()
 	CreateNPCbodyguards(GetHashKey(bodyguard2),vector4(2192.96, 5607, 52.65, 259.08))
     while true do
         local opti = 5000
-        local ped = PlayerPedId()
+        local ped = cache.ped
         local coords = GetEntityCoords(ped)
         local distance = Vdist2(vector3(2194.06, 5597.26, 53.77), coords)
 		
@@ -423,9 +436,9 @@ function CreateNPChitmen(model)
 	SetPedDropsWeaponsWhenDead(npcHitman2, false)
 
 	while true do -- test this loop
-		local playerCoords = GetEntityCoords(PlayerPedId())
+		local playerCoords = GetEntityCoords(cache.ped)
 		TaskVehicleDriveToCoord(npcHitman, hitmenVehicle, playerCoords, 100.0, 0, GetHashKey("gauntlet"), 524800, 10.0, true)
-		if (#(GetEntityCoords(PlayerPedId()) - GetEntityCoords(npcHitman)) < 100.0) then
+		if (#(GetEntityCoords(cache.ped) - GetEntityCoords(npcHitman)) < 100.0) then
 			print("Finished drive to coord")
 			break
 		end 
@@ -433,12 +446,12 @@ function CreateNPChitmen(model)
 	end
 	
 	while true do -- test this loop
-		local playerCoords = GetEntityCoords(PlayerPedId())
-		TaskVehicleChase(npcHitman, PlayerPedId())
+		local playerCoords = GetEntityCoords(cache.ped)
+		TaskVehicleChase(npcHitman, cache.ped)
 		SetTaskVehicleChaseBehaviorFlag(npcHitman, 1, true)
-		TaskShootAtEntity(npcHitman, PlayerPedId(), 2500, GetHashKey("FIRING_PATTERN_BURST_FIRE_DRIVEBY"))
-		TaskShootAtEntity(npcHitman2, PlayerPedId(), 2500, GetHashKey("FIRING_PATTERN_BURST_FIRE_DRIVEBY"))
-		if (#(GetEntityCoords(PlayerPedId()) - GetEntityCoords(npcHitman)) < 25.0) and not IsPedInAnyVehicle(PlayerPedId()) then
+		TaskShootAtEntity(npcHitman, cache.ped, 2500, GetHashKey("FIRING_PATTERN_BURST_FIRE_DRIVEBY"))
+		TaskShootAtEntity(npcHitman2, cache.ped, 2500, GetHashKey("FIRING_PATTERN_BURST_FIRE_DRIVEBY"))
+		if (#(GetEntityCoords(cache.ped) - GetEntityCoords(npcHitman)) < 25.0) and not IsPedInAnyVehicle(cache.ped) then
 			print("Breaking Vehicle Chase Loop")
 			TaskLeaveVehicle(npcHitman, hitmenVehicle, 256)
 			TaskLeaveVehicle(npcHitman2, hitmenVehicle, 256)
@@ -447,7 +460,7 @@ function CreateNPChitmen(model)
 	Wait(3000)
 	end
 	
-	TaskCombatPed(npcHitman, PlayerPedId(), 0, 16)
+	TaskCombatPed(npcHitman, cache.ped, 0, 16)
 
 end
 
