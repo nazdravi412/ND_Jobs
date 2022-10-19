@@ -6,19 +6,6 @@ itemsConfirmed = false
 
 NDCore = exports["ND_Core"]:GetCoreObject()	
 
-RegisterCommand("prog", function()
-local testPed = cache.ped
-print(testPed)
-exports["ModernHUD"]:AndyyyNotify({
-title = "Ox_Lib Test",
-message = "Current ped is "..testPed,
-icon = "fas fa-money-check",
-colorHex = "#34eb52",
-timeout = 5000
-})
-print("PlayerPedId is "..cache.ped)							
-end, false)
-
 -- Set blip only for civs. 
 Citizen.CreateThread(function()
 	while true do
@@ -53,13 +40,13 @@ end)
 
 RegisterNetEvent('DrugTrafficking:itemConfirmed')
 AddEventHandler('DrugTrafficking:itemConfirmed', function(confirmation)
-	print("Confirmation received")
+	--print("Confirmation received")
 	if confirmation == "true" then
-		print("true")
+		--print("true")
 		itemsConfirmed = true
 	else
 		itemsConfirmed = false
-		print("false")
+		--print("false")
 	end	
 end)
 
