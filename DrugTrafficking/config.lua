@@ -1,7 +1,7 @@
 Config = {}
 
 -- amount of money earned per task completed
-Config.Pay = 250
+Config.Pay = 1250
 
 Config.civJob = "SACO"
 
@@ -19,7 +19,7 @@ Config.Positions = {
     {x = 1558.58, y = 3794.97, z = 31.92}, -- Boat House (3022)
     {x = 1377.16, y = 3620.9, z = 32.70}, -- Ace Liquor (3026)
     {x = 903.42, y = 3614.43, z = 30.64}, -- Marina Dr Abandoned Garage (3030)
-    {x = 389.00, y = 3589.44, z = 30.11}, -- Marina Dr Tractor Parts (3032)
+    {x = 389.00, y = 3589.44, z = 33.29}, -- Marina Dr Tractor Parts (3032)
     {x = 20.73, y = 3715.05, z = 37.51}, -- Stab City (3034)
     {x = 1643.74, y = 4836.80, z = 39.84}, -- Grapespeed Paint Shop (2009)
     {x = 1905.70, y = 4924.23, z = 46.69}, -- Grapespeed Farm (2023)
@@ -30,6 +30,31 @@ Config.Positions = {
 Config.Drugs = {
 	'cocaine',
 	'drug_blue',
-	'joint',
+	'drug_red',
+	'drug_white',
 	'meth',
+}
+
+Config.Bodyguards = {
+	--Thugs:
+	--'s_m_y_ammucity_01',
+	--'s_m_y_blackops_01',
+	--'cs_clay',
+	
+	-- Suit and Tie:
+	's_m_m_fiboffice_02',
+	'u_m_m_jewelsec_01',
+
+}
+
+Config.Narcos = {
+	--Thugs:
+	's_m_y_ammucity_01',
+	's_m_y_blackops_01',
+	'cs_clay',
+	
+	-- Suit and Tie:
+	-- 's_m_m_fiboffice_02',
+	-- 'u_m_m_jewelsec_01',
+
 }

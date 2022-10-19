@@ -110,3 +110,27 @@ function dump(o)
       return tostring(o)
    end
 end
+
+RegisterServerEvent('DrugTrafficking:confirmItem')
+AddEventHandler('DrugTrafficking:confirmItem', function(inv, item, count)
+	-- print("item add start")
+	source = source
+	local inv = inv
+	local item = item
+	local count = count
+	
+
+	local invLevel = exports.ox_inventory:Search(inv, 'count', {'meth', 'cocaine', 'drug_blue', 'drug_red', 'drug_white'}, nil)
+	print("search completed"..dump(invLevel))
+	if invLevel ~= false then
+		for name, amount in pairs(invLevel) do
+			if amount >= count then
+				print("confirmed item in inventory")
+				invAdded = true
+				TriggerClientEvent("DrugTrafficking:itemConfirmed", source, "true")
+			end
+		end
+	else
+		TriggerClientEvent("DrugTrafficking:itemConfirmed", source, "false")
+	end
+end)
