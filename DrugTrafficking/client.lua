@@ -98,6 +98,7 @@ function NewBlip()
 				if distance <= 10 and itemsConfirmed then
 					opti = 2
 					DisplayHelpTextThisFrame("press_collect_drugs2")
+					TaskTurnPedToFaceEntity(npcNarco, ped, -1)
 					if IsControlJustPressed(1, 38) then
 						ExecuteCommand("e c")
 						TriggerEvent("rprogress:stop")
@@ -182,6 +183,7 @@ function NewChoice()
             if distance <= 10 and not deadNarco then
                 opti = 2
                 DisplayHelpTextThisFrame("press_collect_drugs")
+				TaskTurnPedToFaceEntity(npcNarco, ped, -1)
                 if IsControlJustPressed(1, 38) and not IsPedInAnyVehicle(ped, true) then
 					ExecuteCommand("e box")
 					TaskWanderStandard(npcNarco, 10.0, 10.0)
