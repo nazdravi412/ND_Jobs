@@ -55,6 +55,15 @@ AddEventHandler('drugTrafficking:startJob', function()
 	StartJob()
 end)
 
+RegisterNetEvent('drugTrafficking:stopJob')
+AddEventHandler('drugTrafficking:stopJob', function()
+	ForceStopService()
+end)
+
+RegisterCommand('stopdrugs', function(source, args)
+    TriggerEvent("drugTrafficking:stopJob")
+end, false)
+
 function NewBlip()
 	timerCompleted = false
     local objective = math.randomchoice(Config.Positions)
@@ -280,6 +289,14 @@ function StopService()
     end
 end
 
+function ForceStopService()
+    TextMessage("CHAR_DAVE", "Kingpin", "Drug Trafficking", "Come see me when you want to take this seriously!", true)
+	RemoveBlip(blip)
+	TaskWanderStandard(npcNarco, 10.0, 10.0)
+	JobStarted = false
+	pay = 0
+end
+
 function StartJob()
     local ped = cache.ped
     JobStarted = true
@@ -366,7 +383,7 @@ function CreateNPCstart(model, startCoords)
         Citizen.Wait(10) 
     end
 
-    npc = CreatePed(69, hashFile, startCoords, true, true) 
+    npc = CreatePed(69, hashFile, startCoords, false, true) 
     --FreezeEntityPosition(npc, true)
     SetEntityInvincible(npc, false)
 	GiveWeaponToPed(npc, GetHashKey("weapon_assaultsmg"),1000, false, false)
@@ -377,7 +394,6 @@ function CreateNPCstart(model, startCoords)
     --TaskStartScenarioInPlace(npc, 'WORLD_HUMAN_GUARD_STAND', 0, true)
 	SetPedRelationshipGroupHash(npc, "DrugTraffickers")
 	SetPedDropsWeaponsWhenDead(npc, false)
-
 end
 
 -- Create NPCs
@@ -428,7 +444,7 @@ function CreateNPChitmen(model)
 		local playerCoords = GetEntityCoords(cache.ped)
 		TaskVehicleDriveToCoord(npcHitman, hitmenVehicle, playerCoords, 100.0, 0, GetHashKey("gauntlet"), 524800, 10.0, true)
 		if (#(GetEntityCoords(cache.ped) - GetEntityCoords(npcHitman)) < 100.0) then
-			print("Finished drive to coord")
+			--print("Finished drive to coord")
 			break
 		end 
 	Wait(5000)
@@ -441,7 +457,7 @@ function CreateNPChitmen(model)
 		TaskShootAtEntity(npcHitman, cache.ped, 2500, GetHashKey("FIRING_PATTERN_BURST_FIRE_DRIVEBY"))
 		TaskShootAtEntity(npcHitman2, cache.ped, 2500, GetHashKey("FIRING_PATTERN_BURST_FIRE_DRIVEBY"))
 		if (#(GetEntityCoords(cache.ped) - GetEntityCoords(npcHitman)) < 25.0) and not IsPedInAnyVehicle(cache.ped) then
-			print("Breaking Vehicle Chase Loop")
+			--print("Breaking Vehicle Chase Loop")
 			TaskLeaveVehicle(npcHitman, hitmenVehicle, 256)
 			TaskLeaveVehicle(npcHitman2, hitmenVehicle, 256)
 			break
@@ -461,7 +477,7 @@ function CreateNPCbodyguards(model, startCoords)
         Citizen.Wait(10) 
     end
 
-    npcBG = CreatePed(69, hashFile, startCoords, true, true) 
+    npcBG = CreatePed(69, hashFile, startCoords, false, true) 
     --FreezeEntityPosition(npcBG, true)
     SetEntityInvincible(npcBG, false)
     --SetBlockingOfNonTemporaryEvents(npcBG, true)
